@@ -1,0 +1,163 @@
+# Views
+
+1- Function Based View
+
+2- Class Based View 
+
+    1- Base
+        - View 
+        - Template View
+        - Redirect View 
+
+    2- Generic
+        * Display View
+            - List View 
+            - Detail View
+        
+        * Editing View
+            - Form   View
+            - Create View
+            - Update View
+            - Delete View
+
+
+-- List View --
+
+from django.generic.view.list import ListView
+
+class StudentsListView(ListView):
+
+    model=Student                   // requierd
+    
+    // default template "ModelName_list.html"
+    // default context  "ModelName_list"
+
+    template_name=""                //  not requierd
+    
+    context_object_name=""          //  not requierd
+
+    def get_queryset(self):         //  not requierd
+        return Studen.objects.filter(branch=Adaby)
+    
+    def get_template_names(self):   //  not requierd
+        if self.request.user.is_superuser:
+            template_name=""
+        elif self.request.user.is_authenticated:
+            template_name=""
+        else:
+            template_name="" 
+        return [template_name]        
+    
+    
+
+
+
+-- Detail View --
+
+from django.views.generic.detail import DetailView
+
+class PlayerDetail(DetailView):
+    
+    model=Player                    // requierd
+    
+    \\ default template_name="ModelName_detail.html"
+    \\ default context      = "ModelName"
+    
+    template_name=""                //  not requierd
+    context_object_name=""          //  not requierd
+
+ 
+____________________________________________
+
+
+-- Create View --
+
+to create an object
+
+from django.views.generic.edit import CreateView
+
+class CreatePlayer(CreateView):
+
+    model=Player             // requierd
+    fields="__all__"         // requierd
+    
+    \\ default template_name="ModelName_form.html"
+
+    template_name=""         // not requierd
+
+    def get_form(self):     // not requierd
+        form=super().get_form()
+        form.fields["password"].widgets=forms.PasswordInput(attrs={"class":"myclass"})
+
+data will send succfuly but you will get an error "No URL to redirect to.Either provide a url or define a get_absolute_url method on the Model"
+so >>>
+    in models.py :
+    
+    class Players(Model):
+        name=CharField(max_length=100)
+        age=IntegerField()
+        
+        def __str__(self) :
+            return self.name
+
+        def get_absolute_url(self):
+            return reverse("url_name", kwargs={"pk": self.pk})   
+
+
+
+
+-- UpdateView --
+
+class UpdatePlayer(UpdateView):    
+   
+    model=Players
+    fields="__all__"
+   
+    template_name=""      // not requierd
+
+    \\ default template_name="Test/players_form.html"
+    
+    success_url=""   // not requierd
+
+
+
+-- Delete View --
+
+class DeletePlayer(DeleteView):
+
+    model=Players           // requierd
+    success_url=" "         // requierd
+    template_name=""        // not requierd
+
+    \\ default template_name="Test/players_confirm_delete.html"
+
+
+
+    
+____________________________________________
+
+-- Template View --
+
+from django.views.generic import TemplateView
+
+class PlayerTemplateView(TemplateView):
+    
+    template_name=""   // requierd
+
+    def get_context_data(self,**kwargs):  // not requierd
+        context=super().get_context_data(**kwargs)
+        context['name']="mostafa"
+        context['age']=23
+
+        return context
+
+
+**kwargs >> path("players/",PlayerTemplateView.as_view(extra_context={"club":"madrid"}),name="players")
+
+we can use url pram directly in djangoTemplate
+path("player/<int:number>/",PlayerTemplateView.as_view(),name="player") >> {{number}}
+
+
+
+
+_________________________________________________
