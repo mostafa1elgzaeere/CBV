@@ -25,12 +25,13 @@ class AddPlayer(View):
     
     
     def post(self,request):
+        message=""
         form=PlayerForm(request.POST)
         if form.is_valid():
             name=form.cleaned_data['name']
             age=form.cleaned_data['age']
             if Players.objects.filter(name=name).exists():
-                message="user already exists"
+                message=""
                 return render(request,"Test\Players_form.html",{"form":form,"message":message})
 
             else:    
@@ -38,6 +39,7 @@ class AddPlayer(View):
                 data.save()
                 form=PlayerForm()
                 message="Add Succefly"
+                
         return render(request,"Test\Players_form.html",{"form":form,"message":message})
 
 

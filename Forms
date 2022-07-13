@@ -15,6 +15,16 @@ class PlayerForm(Form):
     name=CharField(max_length=100)
     age=IntegarField()
 
+    def clean(self):
+        cleaned_data=super().clean()
+        validated_name=self.cleaned_data['name']
+
+
+        # Coustom validate can be in forms.py
+        
+        if Players.objects.filter(name=validated_name).exists():
+            raise ValidationError("user already exists")
+        
 
 * template.html
 
@@ -37,11 +47,17 @@ class PlayerForm(Form):
 
     
     def post(self,request):
-    
+        
+        message=""    
         form=PlayerForm(request.POST)
+        
         if form.is_valid():
+        
             name=form.cleaned_data['name']
             age=form.cleaned_data['age']
+            
+            # Coustom validate can be in views.py
+
             if Players.objects.filter(name=name).exists():
                 message="user already exists"
                 return render(request,"Test\Players_form.html",{"form":form,"message":message})
@@ -51,6 +67,7 @@ class PlayerForm(Form):
                 data.save()
                 form=PlayerForm()
                 message="Add Succefly"
+
         return render(request,"Test\Players_form.html",{"form":form,"message":message})
 
 
