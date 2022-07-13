@@ -1,8 +1,11 @@
+from email import message
 import re
 from urllib import request
 import django
 from django.shortcuts import render
+from django.views import View
 from django.views.generic.list import ListView
+from Test.forms import PlayerForm
 from Test.models import Players
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -10,6 +13,56 @@ from django.views.generic.detail import DetailView
 
 from django.views.generic.edit import CreateView , UpdateView , DeleteView
 from django import forms
+
+
+
+''' Django Forms '''
+class AddPlayer(View):
+    def get(self,request):
+        form=PlayerForm()
+        message=""
+        return render(request,"Test\Players_form.html",{"form":form,"message":message})
+    
+    
+    def post(self,request):
+        form=PlayerForm(request.POST)
+        if form.is_valid():
+            name=form.cleaned_data['name']
+            age=form.cleaned_data['age']
+            if Players.objects.filter(name=name).exists():
+                message="user already exists"
+                return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
+            else:    
+                data=Players(name=name,age=age)
+                data.save()
+                form=PlayerForm()
+                message="Add Succefly"
+        return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

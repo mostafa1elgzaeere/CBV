@@ -1,0 +1,58 @@
+# Forms
+
+1- HTML Forms
+2- Django Forms
+3- Model Forms
+
+
+
+--- Django Forms ---
+
+* forms.py 
+
+class PlayerForm(Form):
+
+    name=CharField(max_length=100)
+    age=IntegarField()
+
+
+* template.html
+
+    <form method="post">
+        {{form.as_p}}
+        <input type="submit" value="Add Player">
+    </form>
+
+
+* views.py
+
+  class AddPlayer(View):
+  
+    def get(self,request):
+
+        form=PlayerForm()
+        message=""
+        return render(request,"Test\Players_form.html",{"form":form,"message":message})
+    
+
+    
+    def post(self,request):
+    
+        form=PlayerForm(request.POST)
+        if form.is_valid():
+            name=form.cleaned_data['name']
+            age=form.cleaned_data['age']
+            if Players.objects.filter(name=name).exists():
+                message="user already exists"
+                return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
+            else:    
+                data=Players(name=name,age=age)
+                data.save()
+                form=PlayerForm()
+                message="Add Succefly"
+        return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
+
+
+

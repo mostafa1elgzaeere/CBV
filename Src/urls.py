@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 
+from Test.views import AddPlayer
+
 
 
 
@@ -27,6 +29,8 @@ urlpatterns = [
     # path("update/<int:pk>",UpdatePlayer.as_view(),name="update_player")
     
     # path("delete/<int:pk>",DeletePlayer.as_view(),name="delete_player")
+    
+    path("add_player_by_django_forms/",AddPlayer.as_view(),name="add_player"),
 
     
 
