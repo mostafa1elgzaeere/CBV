@@ -15,32 +15,59 @@ from django.views.generic.edit import CreateView , UpdateView , DeleteView
 from django import forms
 
 
+''' Model Form '''
 
-''' Django Forms '''
 class AddPlayer(View):
     def get(self,request):
         form=PlayerForm()
-        message=""
-        return render(request,"Test\Players_form.html",{"form":form,"message":message})
-    
+        return render(request,"Test\Players_form.html",{"form":form})
     
     def post(self,request):
-        message=""
         form=PlayerForm(request.POST)
         if form.is_valid():
-            name=form.cleaned_data['name']
-            age=form.cleaned_data['age']
-            if Players.objects.filter(name=name).exists():
-                message=""
-                return render(request,"Test\Players_form.html",{"form":form,"message":message})
+            form.save()
+            form=PlayerForm()
+        else:
+            form=PlayerForm()    
 
-            else:    
-                data=Players(name=name,age=age)
-                data.save()
-                form=PlayerForm()
-                message="Add Succefly"
+
+        return render(request,"Test\Players_form.html",{"form":form})
+
+
+
+
+
+
+
+
+
+
+''' Django Forms '''
+# class AddPlayer(View):
+#     def get(self,request):
+#         form=PlayerForm()
+#         message=""
+#         return render(request,"Test\Players_form.html",{"form":form,"message":message})
+    
+    
+#     def post(self,request):
+#         message=""
+#         form=PlayerForm(request.POST)
+#         if form.is_valid():
+#             name=form.cleaned_data['name']
+#             age=form.cleaned_data['age']
+#             if Players.objects.filter(name=name).exists():
+#                 message=""
+#                 return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
+#             else:    
+#                 data=Players(name=name,age=age)
+#                 data.save()
+#                 form=PlayerForm()
+#                 message="Add Succefly"
                 
-        return render(request,"Test\Players_form.html",{"form":form,"message":message})
+#         return render(request,"Test\Players_form.html",{"form":form,"message":message})
+
 
 
 

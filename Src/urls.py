@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 
+# from Test.views import AddPlayer admin
+from django.urls import path
+
 from Test.views import AddPlayer
 
 
@@ -30,7 +33,8 @@ urlpatterns = [
     
     # path("delete/<int:pk>",DeletePlayer.as_view(),name="delete_player")
     
-    path("add_player_by_django_forms/",AddPlayer.as_view(),name="add_player"),
+    # path("add_player_by_django_forms/",AddPlayer.as_view(),name="add_player"),
+    path("add_player_by_model_forms/",AddPlayer.as_view(),name="add_player"),
 
     
 

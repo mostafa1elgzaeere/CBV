@@ -73,3 +73,58 @@ class PlayerForm(Form):
 
 
 
+_____________________________________________________________________________
+
+-- Model Form -- 
+
+** Create Model Class
+** Create ModelForm Class
+
+forms.py: 
+
+class PlayerForm(ModelForm):
+
+    class Meta:
+        model=Players           // requierd
+        fields="__all__"        // requierd
+        fields=['name','age']   // requierd
+        
+        labels={                // not requierd
+            'name':"Enter Your Name",
+            'age':"Enter Your Age"
+        }
+        
+        help_text={             // ( placeholder ) not requierd
+            'name':"Enter Name",
+            'age':"Enter Age",   
+        }
+
+        error_messages={        // not requierd
+            'name':{'requierd':"error message"},
+            'age':{'requierd':"error message "}
+        }
+
+        widgets={               // not requierd 
+            'name':TextInput(attrs={'class':"myclass"})
+            'password':PasswordInput,
+        }
+
+views.py:
+
+class AddPlayer(View):
+   
+    def get(self,request):
+        form=PlayerForm()
+        return render(request,"Test\Players_form.html",{"form":form})
+    
+    def post(self,request):
+        form=PlayerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form=PlayerForm()
+        else:
+            form=PlayerForm()    
+
+
+        return render(request,"Test\Players_form.html",{"form":form})
+

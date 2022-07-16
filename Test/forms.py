@@ -1,15 +1,52 @@
+from turtle import mode
 from django.forms import *
 
 from Test.models import Players
 
-class PlayerForm(Form):
-    name=CharField(max_length=100)
-    age=IntegerField()
-    
-    def clean(self):
-        cleaned_data=super().clean()
-        validated_name=self.cleaned_data['name']
+''' Django ModelForm'''
+class PlayerForm(ModelForm):
+    class Meta:
+        model=Players
+        fields="__all__"
         
-        if Players.objects.filter(name=validated_name).exists():
-            raise ValidationError("user already exists")
+        help_text={
+            'name':'Enter Your Name',
+            'age':"Enter Your Age"
+        }
+        
+        error_messages={
+            'name':{'requierd':"Enter right Name"}
+        }
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+''' Django Forms'''
+# class PlayerForm(Form):
+#     name=CharField(max_length=100)
+#     age=IntegerField()
+    
+#     def clean(self):
+#         cleaned_data=super().clean()
+#         validated_name=self.cleaned_data['name']
+        
+#         if Players.objects.filter(name=validated_name).exists():
+#             raise ValidationError("user already exists")
+        
         
